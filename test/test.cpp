@@ -200,6 +200,7 @@ LL comb_mod(LL m,LL n){
 //最大公约数与最小公倍数
 LL gcd(LL x,LL y){
 	LL t;
+	if(!(x && y))return -1;
 	while(y){
 		t=x%y;
 		x=y;
@@ -209,7 +210,9 @@ LL gcd(LL x,LL y){
 }
 
 LL lcm(LL x,LL y){
-	return x/gcd(x,y)*y;
+	LL t = gcd(x,y);
+	if(t == -1)return -1;
+	return x/t*y;
 }
 
 //m个相同的元素和n个不同的元素的圆排列的种数为（m+n-1）！/(m!)种； 
