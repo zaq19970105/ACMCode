@@ -2,73 +2,87 @@ using namespace std;
 
 #include <cstdio>
 #include <cstdlib>
-#include <string>
+#include <iostream>
+#include <fstream>
 #include <cstring>
+#include <string>
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 
-typedef long long LL;
+#include <vector>
+#include <map>
+#include <unordered_map>
+#include<cassert>
 
 #define rep(i,n) for (int i = 0; i < (n); ++i)
 #define For(i,s,t) for (int i = (s); i <= (t); ++i)
 #define rFor(i,t,s) for (int i = (t); i >= (s); --i)
-
-#define ms0(a) memset(a,0,sizeof(a))
-
-#define __max(a,b)   (((a)   >   (b))   ?   (a)   :   (b))
+#define foreach(i,c) for (__typeof(c.begin()) i = c.begin(); i != c.end(); ++i)
 
 #define pr(x) cout << #x << " = " << x << "  "
 #define prln(x) cout << #x << " = " << x << endl
 
-const int maxn = 1000;
+#define   __max(a,b)   (((a)   >   (b))   ?   (a)   :   (b))
+#define   __min(a,b)   (((a)   <   (b))   ?   (a)   :   (b))
 
-int tree[maxn];//以编号为值的树
+#define ms0(a) memset(a,0,sizeof(a))
+#define msI(a) memset(a,inf,sizeof(a))
+#define mp(d,s) memcpy(d, s, sizeof(s))
 
-int build(int n){
-	int temp[maxn],left,right;//以编号为序号，编号在tree中实际序号为值的树
-	ms0(temp);
-	temp[1] = 1;
-	For(i,1,n){
-		cin>>left>>right;
-		tree[temp[i]<<1] = left;
-		tree[temp[i]<<1|1] = right;
-		if(left)temp[left] = temp[i]<<1;
-		if(right)temp[right] = temp[i]<<1|1;
-	}
+typedef long long LL;
+typedef pair<int, int> Pii;
+typedef map<int, int> Mii;
+typedef map<string, string> Mss;
+typedef map<string, int> Msi;
+typedef multimap<int, int> MMii;
+
+const int inf = 0x3f3f3f3f;
+const int maxN = 100+5;
+
+
+bool flag;
+int seq = 0;
+
+int Init(){
 	return 0;
 }
 
-int getWidth(int depth){
-	int width = 1,t;
-	if(depth == 0)return 0;
-	rFor(i,depth-1,(int)log2(width)+1){
-		t = 0;
-		rep(j,1<<i)if(tree[1<<i|j])++t;
-		width = __max(width,t);
-	}
-	return width;
+int init(){
+	return 1;
 }
 
-int getDepth(int rt){
-	if(tree[rt] == 0)return 0;
-	int LD = getDepth(rt<<1),RD = getDepth(rt<<1|1);
-	if(LD != 0 && RD != 0) return 1+__max(LD,RD);
-	return 1+LD+RD;
-}
-
-int main() {
-	int n,depth;
-
-	cin>>n;
-	ms0(tree);
-	tree[1] = 1;
-
-	build(n);
-
-	depth = getDepth(1);
-	cout<<getWidth(depth)<<" "<<depth;
-
+int print(){
 	return 0;
+}
+
+int output(){
+	return 0;
+}
+
+int main(){
+	//FILE* fp = fopen("data8.txt","r");
+	//freopen("data3.txt","w",stdout);
+	//Init();
+	while(0){
+		
+		//output();
+	}
+	
+	
+MMii c1;   
+  
+    c1.insert(MMii::value_type('a', 1));   
+    c1.insert(MMii::value_type('b', 2));   
+    c1.insert(MMii::value_type('b', 2));   
+    c1.insert(MMii::value_type('f', 3));   
+    c1.insert(MMii::value_type('d', 4));   
+  
+    for (MMii::const_iterator it = c1.begin(); it != c1.end(); ++it)   
+        std::cout << " [" << (char)it->first << ", " << it->second << "]";   
+    std::cout << std::endl; 
+	
+	//close(fp);
+	
+    return 0;
 }
 

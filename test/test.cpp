@@ -70,6 +70,7 @@ using namespace std;
 #define mss(a) memset(a,-1,sizeof(a))
 #define ms1(a) memset(a,1,sizeof(a))
 #define ms0(a) memset(a,0,sizeof(a))
+#define mp(d,s) memcpy(d, s, sizeof(s))
 
 #define Shell(n,gap,i,j,comp,swap,array) \
 	for(int gap=n/2;gap>0;gap/=2) \
