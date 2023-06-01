@@ -1,4 +1,4 @@
-#include <iostream>         //数据流输入／输出
+﻿#include <iostream>         //数据流输入／输出
 #include <sstream>          //基于字符串的流
 #include <string>           //字符串类
 #include <fstream>          //文件输入／输出
@@ -65,8 +65,8 @@ typedef float               float32;
 typedef double              float64;
 
 int score;
-char str[110000 + 5],len;
-
+char str[110000 + 5];
+int len;
 
 /// @brief Manacher函数专用，求半径
 /// @param diameter_len
@@ -80,32 +80,47 @@ inline uint32 GetRadiusLen(uint32 diameter_len) {
 /// @param raw_str_len 原始字符串长度
 /// @return
 uint32 Manacher(char raw_str[], uint32 raw_str_len) {
-    // diameter_len[i]存以第i个字符为中心的回文子串长度
-    uint32* diameter_len = new uint32[raw_str_len + 5];
     uint32 max_len = 0;
 
+    // 转换：abab => (#a#b#a#b#); aaa => (#a#a#a#)
+    // 不转换的话只能处理奇数长度
+    uint32 new_str_len = raw_str_len * 2 + 3;
+    char* new_str = new char[new_str_len];
+    // diameter_len[i]存以第i个字符为中心的回文子串长度
+    uint32* diameter_len = new uint32[new_str_len];
+
+    new_str[0] = '(';   // 回文左边界
+    new_str[1] = '#';
+    for (uint32 i = 0, j = 2; i < raw_str_len; ++i, j += 2) {
+        new_str[j] = raw_str[i];
+        new_str[j + 1] = '#';
+    }
+    new_str[new_str_len - 1] = ')'; // 回文右边界
+
     // 初始化
-    for (uint32 i = 0; i < raw_str_len; i++)
+    for (uint32 i = 0; i < new_str_len; i++)
     {
         diameter_len[i] = 1;
     }
 
-    for (uint32 i = 1, k = 0; i + k < raw_str_len; i += k) {
+    for (uint32 i = 1, k = 0; i + k < new_str_len; i += k) {
+        // k代表以i为中心的偏移
+        k = 1;  // 设定最低偏移量
         // 计算以第i个字符为中心的回文子串长度
         while (true)
         {
             uint32 radius_len = GetRadiusLen(diameter_len[i]);
 
             // 越上界
-            if ((i + (radius_len + 1)) >= raw_str_len) {
+            if ((i + (radius_len + 1)) >= new_str_len) {
                 break;
             }
             // 越下界
-            if ((i - (radius_len + 1)) < 0) {
+            if ((int32)(i - (radius_len + 1)) < 0) {
                 break;
             }
             // 两边字符相等,回文串长度加2,否则跳出
-            if (raw_str[i + (radius_len + 1)] == raw_str[i - (radius_len + 1)])
+            if (new_str[i + (radius_len + 1)] == new_str[i - (radius_len + 1)])
             {
                 diameter_len[i] += 2;
             }
@@ -120,11 +135,10 @@ uint32 Manacher(char raw_str[], uint32 raw_str_len) {
         }
 
         // Manacher算法核心，以第i个字符为中心操作
-        // k代表以i为中心的偏移
         // 利用已知的diameter_len[i - k]计算diameter_len[i + k]
         for (uint32 j = i - 1; j >= i - GetRadiusLen(diameter_len[i]); --j) {
             k = i - j;
-            if (i + k >= raw_str_len)
+            if (i + k >= new_str_len)
             {
                 break;
             }
@@ -151,26 +165,27 @@ uint32 Manacher(char raw_str[], uint32 raw_str_len) {
     }
 
     // 取最大长度
-    for (uint32 i = 0; i < raw_str_len; i++)
+    for (uint32 i = 0; i < new_str_len; i++)
     {
         max_len = max(max_len, diameter_len[i]);
     }
 
     delete[] diameter_len;
+    delete[] new_str;
 
-    return max_len;
+    return max_len >> 1;
 }
 
 int main() {
-	while(cin>>str){
-		len = strlen(str);
-		
-		score = Manacher(str, len);
+    while (cin >> str) {
+        len = strlen(str);
+        if (len <= 0) {
+            continue;
+        }
 
-		cout<<score<<endl;
-	}
-	return 0;
+        score = Manacher(str, len);
+
+        cout << score << endl;
+    }
+    return 0;
 }
-
-
-
